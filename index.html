@@ -65,14 +65,419 @@ h2 { margin:10px 0 14px; font-size:30px; line-height:1.25; } h3 { margin:0 0 10p
 .footer { color:var(--muted); font-size:12px; margin:24px 0 0; padding-bottom:30px; }
 @media (max-width:1100px) { .stat-grid,.cards-4,.cards-3,.theory-grid,.matrix,.case-grid,.flow { grid-template-columns:repeat(2,minmax(0,1fr)); } .cards-2 { grid-template-columns:1fr; } }
 @media (max-width:720px) { .container { padding:14px; } .hero,.section { padding:22px 18px; } .stat-grid,.cards-4,.cards-3,.theory-grid,.matrix,.case-grid,.mini-stats,.flow { grid-template-columns:1fr; } .nav { position:static; } .report-table th { top:auto; } }
+
+html { scroll-behavior:smooth; }
+body {
+  background:
+    radial-gradient(circle at top left, rgba(213,0,28,.03), transparent 18%),
+    linear-gradient(180deg,#f7f8fb 0%,#f3f5f8 100%);
+}
+#scroll-progress {
+  position:fixed; inset:0 0 auto 0; height:4px; background:rgba(255,255,255,.45);
+  z-index:9999; pointer-events:none;
+}
+#scroll-progress span {
+  display:block; width:0%; height:100%;
+  background:linear-gradient(90deg, var(--red), #ff8b98);
+  box-shadow:0 0 16px rgba(213,0,28,.45);
+  transition:width .1s linear;
+}
+.container { position:relative; }
+.hero {
+  padding:46px 40px 34px;
+  border:1px solid rgba(255,255,255,.14);
+}
+.hero::after{
+  content:"";
+  position:absolute; inset:auto -8% -22% auto;
+  width:340px; height:340px; border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,.14), transparent 65%);
+  pointer-events:none;
+}
+.hero p { font-size:16px; line-height:1.84; margin-top:4px; }
+.hero-highlights{
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px;
+  margin:20px 0 22px;
+}
+.hero-highlight{
+  position:relative;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:18px;
+  padding:16px 16px 14px;
+  background:rgba(255,255,255,.10);
+  backdrop-filter:blur(10px);
+}
+.hh-label{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:11px; letter-spacing:.05em; font-weight:900;
+  padding:4px 8px; border-radius:999px;
+  background:rgba(255,255,255,.16); color:#fff;
+}
+.hero-highlight strong{
+  display:block; margin-top:10px;
+  font-size:17px; line-height:1.45;
+}
+.hero-highlight p{
+  margin:8px 0 0; font-size:13px; color:rgba(255,255,255,.88); line-height:1.72;
+}
+.stat-card {
+  position:relative; overflow:hidden;
+  transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+.stat-card::before{
+  content:""; position:absolute; inset:0 auto 0 0; width:5px;
+  background:linear-gradient(180deg,var(--red), transparent 88%);
+}
+.stat-card:hover{ transform:translateY(-3px); box-shadow:0 20px 44px rgba(0,0,0,.16); }
+
+.nav {
+  top:10px;
+  border:1px solid rgba(255,255,255,.78);
+  box-shadow:0 18px 50px rgba(15,23,42,.10);
+}
+.nav ul { gap:10px; }
+.nav a{
+  transition:all .25s ease;
+  font-weight:700;
+}
+.nav a:hover{ transform:translateY(-1px); background:#fff6f7; border-color:#f1c9cf; }
+.nav a.active{
+  background:linear-gradient(180deg,#d5001c,#b30019);
+  color:#fff; border-color:transparent;
+  box-shadow:0 8px 24px rgba(213,0,28,.26);
+}
+
+.reader-guide{ margin:12px 0 0; }
+.reader-guide-inner{
+  display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap;
+  padding:14px 16px; border:1px solid #f0e3e5; border-radius:16px;
+  background:linear-gradient(180deg,#fff,#fff7f8);
+  color:#475467; box-shadow:0 8px 22px rgba(15,23,42,.04);
+}
+.reader-guide-inner strong{
+  color:var(--red2); font-size:13px; letter-spacing:.03em;
+}
+
+.section{
+  position:relative; overflow:hidden;
+  padding:34px 32px;
+  transition:transform .45s ease, box-shadow .45s ease, opacity .45s ease, filter .45s ease;
+}
+.section::before{
+  content:"";
+  position:absolute; inset:0 0 auto 0; height:6px;
+  background:linear-gradient(90deg,var(--red), rgba(213,0,28,0));
+}
+.section h2{
+  font-size:clamp(28px,3.5vw,40px);
+  letter-spacing:-.02em;
+  margin:12px 0 10px;
+}
+.section h3{ font-size:20px; }
+.lead{
+  font-size:16px;
+  line-height:1.9;
+  padding-left:16px;
+  border-left:4px solid #f2d7dc;
+}
+.kicker{
+  box-shadow:inset 0 0 0 1px rgba(213,0,28,.12);
+}
+.quote{
+  box-shadow:inset 0 0 0 1px rgba(213,0,28,.08);
+}
+
+.card,.info-card,.case-card,.theory-card,.note,.warning,.success,.principle{
+  box-shadow:0 8px 24px rgba(15,23,42,.04);
+  transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease, background .35s ease;
+}
+.card:hover,.info-card:hover,.case-card:hover,.theory-card:hover,.note:hover,.warning:hover,.success:hover,.principle:hover{
+  transform:translateY(-2px);
+  box-shadow:0 18px 36px rgba(15,23,42,.09);
+  border-color:#e8dadd;
+}
+.report-table th{
+  background:linear-gradient(180deg,#fbfcfe,#f3f6fa);
+  border-bottom:1px solid #d9dee7;
+  font-weight:800;
+}
+.report-table tbody tr:nth-child(even) td{ background:#fbfcfe; }
+.report-table tr:hover td{ background:#fff5f6; }
+.table-wrap{
+  box-shadow:inset 0 0 0 1px rgba(15,23,42,.03);
+}
+
+.bar-row{ padding:2px 0; }
+.bar-track{ height:14px; background:#edf1f6; }
+.bar-fill{ border-radius:999px; box-shadow:0 4px 12px rgba(213,0,28,.22); }
+
+.theory-card h3, .info-card h3, .case-card h3, .principle h3 { letter-spacing:-.01em; }
+
+.floating-tools{
+  position:fixed; right:18px; bottom:18px; z-index:2000;
+  display:flex; flex-direction:column; gap:10px;
+}
+.tool-btn{
+  appearance:none; border:none; cursor:pointer;
+  padding:12px 14px; border-radius:14px;
+  background:rgba(17,24,39,.94); color:#fff; font-weight:800; letter-spacing:.02em;
+  box-shadow:0 16px 34px rgba(15,23,42,.18);
+  transition:transform .25s ease, opacity .25s ease, background .25s ease;
+}
+.tool-btn:hover{ transform:translateY(-2px); background:#000; }
+.top-btn{ opacity:0; pointer-events:none; }
+.top-btn.show{ opacity:1; pointer-events:auto; }
+
+.reveal{
+  opacity:0; transform:translateY(18px) scale(.995);
+}
+.reveal.is-visible{
+  opacity:1; transform:none;
+  transition:opacity .65s ease, transform .65s cubic-bezier(.2,.8,.2,1);
+}
+body.focus-mode .hero,
+body.focus-mode .nav,
+body.focus-mode .reader-guide,
+body.focus-mode .section{
+  opacity:.42; filter:saturate(.82);
+}
+body.focus-mode .hero.in-view,
+body.focus-mode .section.in-view,
+body.focus-mode .nav{
+  opacity:1; filter:none;
+}
+body.focus-mode .section.in-view,
+body.focus-mode .hero.in-view{
+  box-shadow:0 24px 64px rgba(15,23,42,.14);
+  transform:translateY(-2px);
+}
+body.focus-mode{
+  background:linear-gradient(180deg,#f1f3f7 0%,#eef2f7 100%);
+}
+body.focus-mode .tool-btn#focusToggle{
+  background:linear-gradient(180deg,#d5001c,#b30019);
+}
+
+@media (max-width:1100px){
+  .hero-highlights{ grid-template-columns:1fr; }
+}
+@media (max-width:720px){
+  .hero{ padding:28px 20px 24px; }
+  .section{ padding:24px 18px; }
+  .reader-guide-inner{ font-size:14px; }
+  .floating-tools{ right:12px; bottom:12px; }
+  .tool-btn{ padding:11px 12px; font-size:13px; }
+}
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *{ animation:none !important; transition:none !important; }
+}
+
+
+.findings-board{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:14px;
+  margin-top:18px;
+}
+.finding-card{
+  position:relative;
+  overflow:hidden;
+  border-radius:22px;
+  padding:18px 16px 16px;
+  background:linear-gradient(180deg,#fff,#fbfcfe);
+  border:1px solid var(--line);
+  box-shadow:0 14px 34px rgba(15,23,42,.07);
+  transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+.finding-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 24px 52px rgba(15,23,42,.12);
+  border-color:#efd0d5;
+}
+.finding-card::before{
+  content:"";
+  position:absolute; inset:0 0 auto 0; height:6px;
+  background:linear-gradient(90deg,var(--red),#ff8b98);
+}
+.finding-no{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:72px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:#111827;
+  color:#fff;
+  font-weight:900;
+  font-size:12px;
+  letter-spacing:.04em;
+}
+.finding-card h3{
+  margin:14px 0 8px;
+  font-size:20px;
+  line-height:1.32;
+  letter-spacing:-.02em;
+}
+.finding-metric{
+  margin:12px 0;
+  padding:12px;
+  border-radius:16px;
+  background:#fff5f6;
+  border:1px solid #f4d4d9;
+}
+.finding-metric strong{
+  display:block;
+  color:var(--red2);
+  font-size:26px;
+  line-height:1.1;
+  letter-spacing:-.03em;
+}
+.finding-metric span{
+  display:block;
+  margin-top:5px;
+  font-size:12px;
+  color:#667085;
+}
+.finding-card p{
+  margin:0;
+  font-size:13.5px;
+  line-height:1.75;
+}
+.finding-action{
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px dashed #e2e8f0;
+  font-size:13px;
+  color:#344054;
+}
+.finding-action b{
+  color:#111827;
+}
+.finding-bridge{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-top:18px;
+}
+.finding-bridge .bridge-card{
+  border-radius:20px;
+  border:1px solid var(--line);
+  padding:18px;
+  background:#fff;
+  box-shadow:0 12px 28px rgba(15,23,42,.05);
+}
+.bridge-card.danger{
+  background:linear-gradient(180deg,#fff,#fff5f6);
+  border-left:6px solid var(--red);
+}
+.bridge-card.logic{
+  background:linear-gradient(180deg,#fff,#f8fafc);
+  border-left:6px solid #111827;
+}
+.finding-callout{
+  margin-top:18px;
+  border-radius:22px;
+  padding:22px;
+  color:#fff;
+  background:
+    radial-gradient(circle at 88% 15%, rgba(255,255,255,.14), transparent 22%),
+    linear-gradient(135deg,#111827,#4a000b 54%,#d5001c);
+  box-shadow:0 22px 48px rgba(15,23,42,.16);
+}
+.finding-callout h3{
+  font-size:24px;
+  margin:0 0 8px;
+}
+.finding-callout p{
+  margin:0;
+  color:rgba(255,255,255,.9);
+}
+.finding-stack{
+  display:grid;
+  gap:14px;
+  margin-top:16px;
+}
+.finding-wide{
+  display:grid;
+  grid-template-columns:160px 1fr 260px;
+  gap:16px;
+  align-items:center;
+  padding:18px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  background:#fff;
+  box-shadow:0 10px 26px rgba(15,23,42,.05);
+}
+.finding-wide .wide-label{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.finding-wide .wide-label span{
+  width:max-content;
+}
+.finding-wide .wide-copy h3{
+  margin:0 0 6px;
+}
+.finding-wide .wide-copy p{
+  margin:0;
+  color:#475467;
+}
+.finding-wide .wide-action{
+  border-left:1px solid var(--line);
+  padding-left:16px;
+  color:#344054;
+  font-size:13.5px;
+}
+.finding-wide .wide-action b{
+  display:block;
+  color:var(--red2);
+  margin-bottom:4px;
+}
+@media (max-width:1200px){
+  .findings-board{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .finding-wide{ grid-template-columns:1fr; }
+  .finding-wide .wide-action{ border-left:none; border-top:1px solid var(--line); padding-left:0; padding-top:12px; }
+}
+@media (max-width:720px){
+  .findings-board,.finding-bridge{ grid-template-columns:1fr; }
+}
+
 </style>
 </head>
 <body>
+
+<div id="scroll-progress" aria-hidden="true"><span></span></div>
+<div class="floating-tools" aria-label="閲覧補助">
+  <button class="tool-btn" id="focusToggle" type="button" aria-pressed="false">集中モード</button>
+  <button class="tool-btn top-btn" id="scrollTopBtn" type="button" aria-label="ページ上部へ戻る">↑ TOP</button>
+</div>
+
 <div class="container">
-  <section class="hero">
+  <section class="hero" id="top">
     <div class="eyebrow">ULTIMATE RESTRUCTURED REPORT • 2026-04-29 08:47</div>
     <h1>浦和レッズ 公式X発信分析レポート<br>1〜4月・イベント告知編</h1>
     <p>定量ファクト、町田戦深掘り、投稿集中の影響、X外部リンク問題、認知科学・メディア論を一本の論理で再構成。結論は「発信量」ではなく、<strong>情報密度・主訴求占有率・投稿役割・リンク設計</strong>を管理すること。</p>
+
+    <div class="hero-highlights">
+      <div class="hero-highlight">
+        <span class="hh-label">核心</span>
+        <strong>情報が多いのではなく、意味が競合した</strong>
+        <p>主訴求と補足情報の階層が弱いと、企画が強いほど伝わりにくくなる。</p>
+      </div>
+      <div class="hero-highlight">
+        <span class="hh-label">重要発見</span>
+        <strong>同日9本以上で効率が大きく低下</strong>
+        <p>平均インプレッション、URL CTR、中央値URLクリックが同時に落ちる傾向。</p>
+      </div>
+      <div class="hero-highlight">
+        <span class="hh-label">実務示唆</span>
+        <strong>1試合1主語、1投稿1役割、1行動1リンク</strong>
+        <p>認知投稿・行動投稿・当日案内を分けることで、迷わせず届かせる。</p>
+      </div>
+    </div>
+
     <div class="stat-grid">
       <div class="stat-card"><span class="label">対象期間</span><span class="value">1〜4月</span><span class="sub">4月は4/28まで</span></div>
       <div class="stat-card"><span class="label">全投稿数</span><span class="value">797</span><span class="sub">CSV 4本合算</span></div>
@@ -85,6 +490,7 @@ h2 { margin:10px 0 14px; font-size:30px; line-height:1.25; } h3 { margin:0 0 10p
   <nav class="nav">
     <ul>
       <li><a href="#argument">全体構造</a></li>
+      <li><a href="#findings">ファインディング</a></li>
       <li><a href="#quant">定量</a></li>
       <li><a href="#concentration">投稿集中</a></li>
       <li><a href="#cases">試合別</a></li>
@@ -96,6 +502,13 @@ h2 { margin:10px 0 14px; font-size:30px; line-height:1.25; } h3 { margin:0 0 10p
       <li><a href="#sources">ソース</a></li>
     </ul>
   </nav>
+
+  <div class="reader-guide">
+    <div class="reader-guide-inner">
+      <strong>読み方ガイド</strong>
+      <span>まず「全体構造」→「投稿集中」→「町田戦」→「運用ルール」の順で読むと、論点のつながりが追いやすいです。</span>
+    </div>
+  </div>
 
   <section id="argument" class="section">
     <div class="kicker">CORE ARGUMENT</div>
@@ -127,6 +540,72 @@ h2 { margin:10px 0 14px; font-size:30px; line-height:1.25; } h3 { margin:0 0 10p
       <div class="card"><span class="big-num">5</span><h3>改善</h3><p>1試合1主語、1投稿1役割、1行動1リンク</p></div>
     </div>
   </section>
+
+
+  <section id="findings" class="section">
+    <div class="kicker">KEY FINDINGS</div>
+    <h2>主要ファインディング：このレポートで最も重要な発見</h2>
+    <p class="lead">ここをレポートの核にします。数字で見えたことを、単なる集計結果ではなく、発信設計の判断に使える形へ変換しました。</p>
+
+    <div class="findings-board">
+      <article class="finding-card">
+        <span class="finding-no">FINDING 01</span>
+        <h3>発信量は十分。課題は“意味の渋滞”</h3>
+        <div class="finding-metric"><strong>487投稿</strong><span>販促・運用系投稿。全体の61.1%</span></div>
+        <p>1〜4月は非サッカー面の情報をかなり出せていた。問題は不足ではなく、主訴求・補足情報・当日案内が同じ粒度で並んだこと。</p>
+        <div class="finding-action"><b>打ち手</b> 1試合1主語を事前に決める。</div>
+      </article>
+
+      <article class="finding-card">
+        <span class="finding-no">FINDING 02</span>
+        <h3>カテゴリごとに“効く指標”が違う</h3>
+        <div class="finding-metric"><strong>グッズ強</strong><span>クリック行動に変換されやすい領域</span></div>
+        <p>グッズ・グルメは「見たい／買いたい」が明確。一方、イベント・ファミリー施策は好意形成に寄り、クリックや購入には翻訳が必要。</p>
+        <div class="finding-action"><b>打ち手</b> ERとURL CTRを同じ評価軸にしない。</div>
+      </article>
+
+      <article class="finding-card">
+        <span class="finding-no">FINDING 03</span>
+        <h3>投稿集中で、1本あたりの効率が落ちる</h3>
+        <div class="finding-metric"><strong>332→60</strong><span>中央値URLクリック。1〜2本日 → 9本以上日</span></div>
+        <p>同日に施策系投稿が集中すると、投稿同士が競合する。特に9本以上の日は、平均imp、URL CTR、中央値URLクリックが同時に落ちる。</p>
+        <div class="finding-action"><b>打ち手</b> 同日6本超は統合・時差・役割分担を検討。</div>
+      </article>
+
+      <article class="finding-card">
+        <span class="finding-no">FINDING 04</span>
+        <h3>町田戦は“550円”が中心議題になりきれなかった</h3>
+        <div class="finding-metric"><strong>主訴求分散</strong><span>価格・体験・案内が並列化</span></div>
+        <p>550円は発信されていた。ただし、グルメ、圧着、のりもの、マスコット、当日案内と同じ強さで並び、第一想起が分散した。</p>
+        <div class="finding-action"><b>打ち手</b> 550円を「初観戦の入口」として再フレーミング。</div>
+      </article>
+
+      <article class="finding-card">
+        <span class="finding-no">FINDING 05</span>
+        <h3>外部リンクは“投稿目的”で使い分ける</h3>
+        <div class="finding-metric"><strong>リンク≠常時</strong><span>認知投稿と行動投稿を分離</span></div>
+        <p>Xのリンク投稿はリーチ面で不利になりうる。だから全投稿でURLクリックを狙うのではなく、認知投稿はリンクなし、行動投稿はリンク1本。</p>
+        <div class="finding-action"><b>打ち手</b> リンクあり／なしをKPIから分ける。</div>
+      </article>
+    </div>
+
+    <div class="finding-callout">
+      <h3>最重要ファインディング</h3>
+      <p>イベント告知の成否は、投稿数ではなく「主訴求がどれだけ守られたか」で決まる。投稿集中、町田戦の550円分散、外部リンク問題はすべて同じ構造で、<strong>受け手の注意と行動導線を奪い合っている</strong>。</p>
+    </div>
+
+    <div class="finding-bridge">
+      <div class="bridge-card danger">
+        <h3>やってはいけない理解</h3>
+        <p>「投稿が多すぎたから、次は減らそう」で止めること。減らすだけでは、主訴求が曖昧なままなら改善しない。</p>
+      </div>
+      <div class="bridge-card logic">
+        <h3>正しい理解</h3>
+        <p>投稿を減らすのではなく、<strong>投稿の役割を分ける</strong>。認知、魅力、行動、当日案内を分離し、同じ日にぶつけすぎない。</p>
+      </div>
+    </div>
+  </section>
+
 
   <section id="quant" class="section">
     <div class="kicker">QUANTITATIVE FACTS</div>
@@ -533,6 +1012,39 @@ h2 { margin:10px 0 14px; font-size:30px; line-height:1.25; } h3 { margin:0 0 10p
     <div class="kicker">FINDING 03</div>
     <h2>投稿集中の影響：同日に施策系投稿が多いほど、1投稿あたりの効率が落ちる</h2>
     <p class="lead">ここは今回の重要ファインディング。施策系投稿を日別に数え、同日に何本出ていたかで分類すると、9本以上の日は平均インプレッション・URL CTR・中央値URLクリックが大きく落ちました。</p>
+
+    <div class="finding-stack">
+      <div class="finding-wide">
+        <div class="wide-label">
+          <span class="finding-no">集中度</span>
+          <span class="pill">最重要</span>
+        </div>
+        <div class="wide-copy">
+          <h3>9本以上の日は、数字上も“渋滞”が起きている</h3>
+          <p>平均インプレッションは125,775→55,004、平均URL CTRは1.43%→0.62%、中央値URLクリックは332→60。これは、投稿数が多い日ほどユーザーの注意が割れ、1本ごとの役割が弱まることを示唆する。</p>
+        </div>
+        <div class="wide-action">
+          <b>運用判断</b>
+          同日6本を超えたら、投稿統合・時間分散・返信リンク化・まとめ投稿化を検討。
+        </div>
+      </div>
+
+      <div class="finding-wide">
+        <div class="wide-label">
+          <span class="finding-no">解釈</span>
+          <span class="pill">理論接続</span>
+        </div>
+        <div class="wide-copy">
+          <h3>投稿集中は“アルゴリズム問題”だけではなく“認知問題”</h3>
+          <p>同じアカウントから似た粒度の告知が続くと、受け手は何を優先すればよいか判断しにくい。これは認知負荷、選択過多、アジェンダ設定の問題として説明できる。</p>
+        </div>
+        <div class="wide-action">
+          <b>見るべきKPI</b>
+          投稿本数ではなく、主訴求占有率・同日施策投稿本数・投稿役割の重複率。
+        </div>
+      </div>
+    </div>
+
     <div class="cards-3">
       <div class="principle"><h3>平均インプレッション</h3><span class="big-num">125,775 → 55,004</span><p>1〜2本の日から9本以上の日で約56%低下。</p></div>
       <div class="principle"><h3>平均URL CTR</h3><span class="big-num">1.43% → 0.62%</span><p>URL CTRは約57%低下。</p></div>
@@ -1150,5 +1662,67 @@ h2 { margin:10px 0 14px; font-size:30px; line-height:1.25; } h3 { margin:0 0 10p
 
   <div class="footer">Generated: 2026-04-29 08:47 JST / Ultimate reconstructed version.</div>
 </div>
+
+<script>
+(function(){
+  const progress = document.querySelector('#scroll-progress span');
+  const topBtn = document.getElementById('scrollTopBtn');
+  const focusBtn = document.getElementById('focusToggle');
+  const navLinks = Array.from(document.querySelectorAll('.nav a[href^="#"]'));
+  const sections = Array.from(document.querySelectorAll('.hero, .section'));
+  const revealTargets = Array.from(document.querySelectorAll('.hero, .section, .stat-card, .card, .info-card, .case-card, .theory-card, .note, .warning, .success, .principle, .table-wrap'));
+
+  revealTargets.forEach(el => el.classList.add('reveal'));
+
+  const revealObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.08, rootMargin:'0px 0px -6% 0px'});
+  revealTargets.forEach(el => revealObserver.observe(el));
+
+  const sectionObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      const id = entry.target.id;
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        if(id){
+          navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+        }
+      } else {
+        entry.target.classList.remove('in-view');
+      }
+    });
+  }, {threshold:0.28, rootMargin:'-10% 0px -55% 0px'});
+  sections.forEach(sec => sectionObserver.observe(sec));
+
+  function updateProgress(){
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progress.style.width = ratio + '%';
+    if(scrollTop > 500){
+      topBtn.classList.add('show');
+    }else{
+      topBtn.classList.remove('show');
+    }
+  }
+  updateProgress();
+  window.addEventListener('scroll', updateProgress, {passive:true});
+  window.addEventListener('resize', updateProgress);
+
+  topBtn.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+
+  focusBtn.addEventListener('click', ()=>{
+    const on = document.body.classList.toggle('focus-mode');
+    focusBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    focusBtn.textContent = on ? '集中モード ON' : '集中モード';
+  });
+})();
+</script>
+
 </body>
 </html>
